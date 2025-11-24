@@ -78,9 +78,11 @@
 <script>
     var noBtn = document.getElementById("noBtn");
 
+    // Use CSS transform to shift the button on hover so it "runs away" reliably
     noBtn.addEventListener("mouseenter", function () {
-        noBtn.style.top = (Math.random() * 60 - 30) + "px";
-        noBtn.style.left = (Math.random() * 60 - 30) + "px";
+        var dx = Math.floor(Math.random() * 160 - 80); // random x offset
+        var dy = Math.floor(Math.random() * 80 - 40);  // random y offset
+        noBtn.style.transform = "translate(" + dx + "px, " + dy + "px)";
     });
 
     document.getElementById("yesBtn").onclick = function () {
@@ -88,8 +90,8 @@
     };
 
     document.getElementById("goPlanBtn").onclick = function () {
-        // from ask_her_out folder, go to schedule folder
-        window.location.href = "../schedule/schedule.html";
+        // `schedule.html` is at the project root; navigate there
+        window.location.href = "schedule.html";
     };
 </script>
 
