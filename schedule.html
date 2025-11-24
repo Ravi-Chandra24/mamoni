@@ -117,6 +117,18 @@ function buildTimeline() {
 }
 
 showStep();
+// If opened with ?full=1, show the full plan immediately
+try {
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('full') === '1') {
+        buildTimeline();
+        fullPlan.style.display = 'block';
+        var byeBtn = document.getElementById('byeBtn');
+        if (byeBtn) byeBtn.style.display = 'inline-block';
+    }
+} catch (e) {
+    // ignore
+}
 </script>
 
 </body>
