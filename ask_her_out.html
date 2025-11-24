@@ -57,14 +57,14 @@
             margin: 8px;
             font-weight: 600;
             font-size: 0.95rem;
-            transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+            transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, background 0.15s ease-out;
         }
 
         #yesBtn {
             background: #2563eb;
             color: white;
             box-shadow: 0 8px 20px rgba(37, 99, 235, 0.55);
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 6px;
@@ -73,63 +73,45 @@
         #yesBtn:hover {
             transform: translateY(-2px);
             box-shadow: 0 12px 26px rgba(37, 99, 235, 0.65);
+            background: #1d4ed8;
         }
 
         #noBtn {
             background: #e5e7eb;
             color: #374151;
             position: relative;
-            transition: transform 0.18s ease-out;
         }
 
-        #overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(15, 23, 42, 0.55);
-            justify-content: center;
-            align-items: center;
-            padding: 18px;
-        }
-
-        .overlay-box {
-            background: #ffffff;
-            padding: 24px 22px;
-            border-radius: 16px;
-            width: 320px;
-            text-align: center;
-            box-shadow: 0 14px 35px rgba(15, 23, 42, 0.35);
-        }
-
-        .overlay-box h3 {
-            font-family: "Playfair Display", serif;
-            margin: 0 0 10px 0;
-            color: #0f172a;
-        }
-
-        .overlay-box p {
-            margin: 0 0 18px 0;
-            color: #4b5563;
-        }
-
-        #goPlanBtn {
-            background: #2563eb;
-            color: white;
-            padding: 9px 18px;
-            border-radius: 22px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        #goPlanBtn:hover {
-            transform: translateY(-1px);
-            background: #1d4ed8;
+        #noBtn:hover {
+            /* transform handled in JS for the playful movement */
         }
 
         .small-note {
             font-size: 0.8rem;
             color: #6b7280;
             margin-top: 8px;
+        }
+
+        #yesMessage {
+            font-size: 0.95rem;
+            color: #4b5563;
+            margin-top: 16px;
+        }
+
+        #goPlanBtn {
+            background: #2563eb;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        #goPlanBtn:hover {
+            transform: translateY(-1px);
+            background: #1d4ed8;
         }
     </style>
 </head>
@@ -144,47 +126,43 @@
 
     <p>You make everything feel a little softer, a little sweeter, just by being you.</p>
 
-    <div id="buttonRow" style="position:relative; display:inline-block;">
+    <div id="buttonRow">
         <button id="yesBtn" type="button">❤️ Yes</button>
         <button id="noBtn" type="button">No</button>
     </div>
+
+    <p id="yesMessage" style="display:none;">
+        I know you will say yes and I know you're missing me so much.
+    </p>
+
+    <button id="goPlanBtn" type="button" style="display:none;">
+        Now let me show you the plan I made for us
+    </button>
 
     <div class="small-note">
         I know it’s cheesy… but I really mean it.
     </div>
 </div>
 
-<div id="overlay">
-    <div class="overlay-box" role="dialog" aria-modal="true" aria-labelledby="overlayTitle">
-        <button id="closeOverlay" type="button" aria-label="Close" style="position:absolute;right:12px;top:10px;background:transparent;border:none;font-size:18px;cursor:pointer">✕</button>
-        <h3 id="overlayTitle">You said yes</h3>
-
-        <!-- UPDATED CUTE LINE -->
-        <p>I know you will say yes and I know you're missing me so much.</p>
-
-        <button id="goPlanBtn" type="button">Now let me show you the plan I made for us</button>
-    </div>
-</div>
-
 <script>
-    (function(){
+    (function () {
         var noBtn = document.getElementById("noBtn");
-        var box = document.querySelector('.box');
-        var overlay = document.getElementById('overlay');
-        var yesBtn = document.getElementById('yesBtn');
-        var goPlan = document.getElementById('goPlanBtn');
-        var closeOverlay = document.getElementById('closeOverlay');
-        var lastFocused = null;
+        var yesBtn = document.getElementById("yesBtn");
+        var buttonRow = document.getElementById("buttonRow");
+        var yesMessage = document.getElementById("yesMessage");
+        var goPlanBtn = document.getElementById("goPlanBtn");
+        var box = document.querySelector(".box");
 
-        function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
+        function clamp(v, a, b) {
+            return Math.max(a, Math.min(b, v));
+        }
 
-        // Move the No button to a random position constrained inside .box
-        noBtn.addEventListener('mouseenter', function (e) {
+        // Move the No button inside the box area on hover
+        noBtn.addEventListener("mouseenter", function () {
             var boxRect = box.getBoundingClientRect();
             var btnRect = noBtn.getBoundingClientRect();
 
-            // compute allowed translate ranges so the button stays fully inside the box
-            var minX = boxRect.left - btnRect.left + 8; // small padding
+            var minX = boxRect.left - btnRect.left + 8;
             var maxX = boxRect.right - btnRect.right - 8;
             var minY = boxRect.top - btnRect.top + 8;
             var maxY = boxRect.bottom - btnRect.bottom - 8;
@@ -195,48 +173,21 @@
             dx = clamp(dx, minX, maxX);
             dy = clamp(dy, minY, maxY);
 
-            noBtn.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
+            noBtn.style.transform = "translate(" + dx + "px, " + dy + "px)";
         });
 
-        // Show overlay (and trap focus)
-        yesBtn.addEventListener('click', function(){
-            lastFocused = document.activeElement;
-            overlay.style.display = 'flex';
-            // focus first focusable element in overlay
-            setTimeout(function(){
-                var focusable = overlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-                if (focusable.length) focusable[0].focus();
-            }, 10);
-            document.body.style.overflow = 'hidden';
+        // When Yes is clicked:
+        // hide Yes/No, show cute message + plan button
+        yesBtn.addEventListener("click", function () {
+            buttonRow.style.display = "none";
+            yesMessage.style.display = "block";
+            goPlanBtn.style.display = "inline-block";
         });
 
-        function closeDialog(){
-            overlay.style.display = 'none';
-            document.body.style.overflow = '';
-            if (lastFocused) try { lastFocused.focus(); } catch(e){}
-        }
-
-        closeOverlay.addEventListener('click', closeDialog);
-
-        // close on Escape and trap Tab inside overlay
-        overlay.addEventListener('keydown', function(e){
-            if (e.key === 'Escape') { closeDialog(); }
-            if (e.key === 'Tab') {
-                var focusable = Array.prototype.slice.call(overlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'));
-                if (!focusable.length) { e.preventDefault(); return; }
-                var idx = focusable.indexOf(document.activeElement);
-                if (e.shiftKey) {
-                    if (idx === 0) { focusable[focusable.length-1].focus(); e.preventDefault(); }
-                } else {
-                    if (idx === focusable.length-1) { focusable[0].focus(); e.preventDefault(); }
-                }
-            }
+        // Go to schedule page
+        goPlanBtn.addEventListener("click", function () {
+            window.location.href = "schedule.html";
         });
-
-        // clicking overlay background closes
-        overlay.addEventListener('click', function(e){ if (e.target === overlay) closeDialog(); });
-
-        goPlan.addEventListener('click', function(){ window.location.href = 'schedule.html'; });
     })();
 </script>
 
