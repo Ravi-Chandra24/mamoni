@@ -13,7 +13,7 @@
     <style>
         body {
             font-family: "Poppins", Arial, sans-serif;
-            background: #e6f2ff; 
+            background: #e6f2ff;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -49,6 +49,12 @@
             color: #4b5563;
         }
 
+        .small-note {
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-top: 8px;
+        }
+
         button {
             padding: 10px 20px;
             border-radius: 25px;
@@ -62,7 +68,7 @@
 
         #yesBtn {
             background: #2563eb;
-            color: white;
+            color: #ffffff;
             box-shadow: 0 8px 20px rgba(37, 99, 235, 0.55);
             display: inline-flex;
             align-items: center;
@@ -82,25 +88,9 @@
             position: relative;
         }
 
-        #noBtn:hover {
-            /* transform handled in JS for the playful movement */
-        }
-
-        .small-note {
-            font-size: 0.8rem;
-            color: #6b7280;
-            margin-top: 8px;
-        }
-
-        #yesMessage {
-            font-size: 0.95rem;
-            color: #4b5563;
-            margin-top: 16px;
-        }
-
         #goPlanBtn {
             background: #2563eb;
-            color: white;
+            color: #ffffff;
             padding: 10px 20px;
             border-radius: 25px;
             cursor: pointer;
@@ -124,13 +114,21 @@
 
     <h2>Will you be my oxytocin receptor gene?</h2>
 
-    <p>You make everything feel a little softer, a little sweeter, just by being you.</p>
+    <!-- Text only for the first screen -->
+    <p id="introLine">
+        You make everything feel a little softer, a little sweeter, just by being you.
+    </p>
 
     <div id="buttonRow">
         <button id="yesBtn" type="button">❤️ Yes</button>
         <button id="noBtn" type="button">No</button>
     </div>
 
+    <p id="introNote" class="small-note">
+        I know it’s cheesy… but I really mean it.
+    </p>
+
+    <!-- Text only after she clicks Yes -->
     <p id="yesMessage" style="display:none;">
         I know you will say yes and I know you're missing me so much.
     </p>
@@ -138,26 +136,23 @@
     <button id="goPlanBtn" type="button" style="display:none;">
         Now let me show you the plan I made for us
     </button>
-
-    <div class="small-note">
-        I know it’s cheesy… but I really mean it.
-    </div>
 </div>
 
 <script>
     (function () {
-        var noBtn = document.getElementById("noBtn");
+        var box = document.querySelector(".box");
         var yesBtn = document.getElementById("yesBtn");
+        var noBtn = document.getElementById("noBtn");
         var buttonRow = document.getElementById("buttonRow");
+        var introLine = document.getElementById("introLine");
+        var introNote = document.getElementById("introNote");
         var yesMessage = document.getElementById("yesMessage");
         var goPlanBtn = document.getElementById("goPlanBtn");
-        var box = document.querySelector(".box");
 
         function clamp(v, a, b) {
             return Math.max(a, Math.min(b, v));
         }
 
-        // Move the No button inside the box area on hover
         noBtn.addEventListener("mouseenter", function () {
             var boxRect = box.getBoundingClientRect();
             var btnRect = noBtn.getBoundingClientRect();
@@ -176,15 +171,14 @@
             noBtn.style.transform = "translate(" + dx + "px, " + dy + "px)";
         });
 
-        // When Yes is clicked:
-        // hide Yes/No, show cute message + plan button
         yesBtn.addEventListener("click", function () {
             buttonRow.style.display = "none";
+            introLine.style.display = "none";
+            introNote.style.display = "none";
             yesMessage.style.display = "block";
             goPlanBtn.style.display = "inline-block";
         });
 
-        // Go to schedule page
         goPlanBtn.addEventListener("click", function () {
             window.location.href = "schedule.html";
         });
