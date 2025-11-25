@@ -27,6 +27,7 @@
             border-radius: 18px;
             text-align: center;
             box-shadow: 0 12px 30px rgba(15,23,42,0.18);
+            position: relative;
         }
 
         .decor-top {
@@ -62,7 +63,6 @@
             margin: 8px;
             font-weight: 600;
             font-size: 0.95rem;
-            transition: transform .15s ease-out, box-shadow .15s ease-out;
         }
 
         #yesBtn {
@@ -80,7 +80,7 @@
         #noBtn {
             background:#e5e7eb;
             color:#374151;
-            position:relative;
+            position: absolute;
         }
 
         #goPlanBtn {
@@ -93,11 +93,6 @@
             margin-top:10px;
             box-shadow:0 8px 20px rgba(37,99,235,0.4);
             display:none;
-        }
-
-        #goPlanBtn:hover {
-            transform:translateY(-1px);
-            background:#1d4ed8;
         }
     </style>
 </head>
@@ -123,10 +118,11 @@
         I know it’s cheesy but I really mean it.
     </p>
 
+    <!-- FINAL CORRECT MESSAGE -->
     <p id="yesMessage" style="display:none;">
         I knew you’d hit yes.<br>
         And from this moment on, I’m never letting your hand go.<br>
-        I'm yours and you're mine now ❤️.
+        I’m yours and you’re mine now ❤️.
     </p>
 
     <button id="goPlanBtn">Now let me show you the plan I made for us</button>
@@ -134,7 +130,7 @@
 
 <script>
 (function(){
-    var box = document.querySelector(".box");
+
     var yesBtn = document.getElementById("yesBtn");
     var noBtn = document.getElementById("noBtn");
     var buttonRow = document.getElementById("buttonRow");
@@ -145,14 +141,21 @@
     var mainQuestion = document.getElementById("mainQuestion");
     var topName = document.getElementById("topName");
 
-    // FAST NO BUTTON
+    // ULTRA FAST NO BUTTON — FULL SCREEN TELEPORT
     noBtn.addEventListener("mouseenter", function(){
-        noBtn.style.transition = "transform 0.08s linear";
-        var dx = Math.floor(Math.random()*300 - 150);
-        var dy = Math.floor(Math.random()*160 - 80);
+
+        noBtn.style.transition = "transform 0.03s linear";
+
+        var maxX = window.innerWidth - 200;
+        var maxY = window.innerHeight - 200;
+
+        var dx = Math.floor(Math.random() * maxX) - maxX/2;
+        var dy = Math.floor(Math.random() * maxY) - maxY/2;
+
         noBtn.style.transform = "translate(" + dx + "px, " + dy + "px)";
     });
 
+    // YES BUTTON
     yesBtn.addEventListener("click", function(){
         buttonRow.style.display="none";
         introLine.style.display="none";
@@ -165,7 +168,7 @@
     });
 
     goPlanBtn.addEventListener("click", function(){
-        window.location.href = "schedule.html";
+        window.location.href = "schedule.html?v=" + Date.now();
     });
 
 })();
