@@ -5,7 +5,6 @@
     <title>Will You Be My Oxytocin Receptor Gene?</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
@@ -27,7 +26,7 @@
             padding: 26px 24px;
             border-radius: 18px;
             text-align: center;
-            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
+            box-shadow: 0 12px 30px rgba(15,23,42,0.18);
         }
 
         .decor-top {
@@ -63,46 +62,42 @@
             margin: 8px;
             font-weight: 600;
             font-size: 0.95rem;
-            transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, background 0.15s ease-out;
+            transition: transform .15s ease-out, box-shadow .15s ease-out;
         }
 
         #yesBtn {
             background: #2563eb;
-            color: #ffffff;
-            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.55);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(37,99,235,.55);
         }
 
         #yesBtn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 26px rgba(37, 99, 235, 0.65);
-            background: #1d4ed8;
+            box-shadow: 0 12px 26px rgba(37,99,235,.65);
+            background:#1d4ed8;
         }
 
         #noBtn {
-            background: #e5e7eb;
-            color: #374151;
-            position: relative;
+            background:#e5e7eb;
+            color:#374151;
+            position:relative;
         }
 
         #goPlanBtn {
-            background: #2563eb;
-            color: #ffffff;
-            padding: 10px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 600;
-            margin-top: 10px;
-            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
-            display: none;
+            background:#2563eb;
+            color:#fff;
+            padding:10px 20px;
+            border-radius:25px;
+            cursor:pointer;
+            font-weight:600;
+            margin-top:10px;
+            box-shadow:0 8px 20px rgba(37,99,235,0.4);
+            display:none;
         }
 
         #goPlanBtn:hover {
-            transform: translateY(-1px);
-            background: #1d4ed8;
+            transform:translateY(-1px);
+            background:#1d4ed8;
         }
     </style>
 </head>
@@ -115,7 +110,7 @@
 
     <h2 id="mainQuestion">Will you be my oxytocin receptor gene?</h2>
 
-    <p id="introLine">
+    <p id="introLine">  
         You make everything feel a little softer, a little sweeter, just by being you.
     </p>
 
@@ -129,58 +124,51 @@
     </p>
 
     <p id="yesMessage" style="display:none;">
-        I know you will say yes and I know you’re very excited to meet me. Me too.
+        I knew you’d hit yes.<br>
+        And from this moment on, I’m never letting your hand go.<br>
+        I'm yours and you're mine now.
     </p>
 
-    <button id="goPlanBtn" type="button">
-        Now let me show you the plan I made for us
-    </button>
+    <button id="goPlanBtn">Now let me show you the plan I made for us</button>
 </div>
 
 <script>
-    (function () {
-        var box = document.querySelector(".box");
-        var yesBtn = document.getElementById("yesBtn");
-        var noBtn = document.getElementById("noBtn");
-        var buttonRow = document.getElementById("buttonRow");
-        var introLine = document.getElementById("introLine");
-        var introNote = document.getElementById("introNote");
-        var yesMessage = document.getElementById("yesMessage");
-        var goPlanBtn = document.getElementById("goPlanBtn");
-        var mainQuestion = document.getElementById("mainQuestion");
-        var topName = document.getElementById("topName");
+(function(){
+    var box = document.querySelector(".box");
+    var yesBtn = document.getElementById("yesBtn");
+    var noBtn = document.getElementById("noBtn");
+    var buttonRow = document.getElementById("buttonRow");
+    var introLine = document.getElementById("introLine");
+    var introNote = document.getElementById("introNote");
+    var yesMessage = document.getElementById("yesMessage");
+    var goPlanBtn = document.getElementById("goPlanBtn");
+    var mainQuestion = document.getElementById("mainQuestion");
+    var topName = document.getElementById("topName");
 
-        // FAST NO BUTTON
-        noBtn.addEventListener("mouseenter", function () {
+    // FAST NO BUTTON
+    noBtn.addEventListener("mouseenter", function(){
+        noBtn.style.transition = "transform 0.08s linear";
+        var dx = Math.floor(Math.random()*300 - 150);
+        var dy = Math.floor(Math.random()*160 - 80);
+        noBtn.style.transform = "translate(" + dx + "px, " + dy + "px)";
+    });
 
-            noBtn.style.transition = "transform 0.08s linear";
+    yesBtn.addEventListener("click", function(){
+        buttonRow.style.display="none";
+        introLine.style.display="none";
+        introNote.style.display="none";
+        mainQuestion.style.display="none";
+        topName.style.display="none";
 
-            var minX = -150;  // bigger jumps
-            var maxX = 150;
-            var minY = -80;
-            var maxY = 80;
+        yesMessage.style.display="block";
+        goPlanBtn.style.display="inline-block";
+    });
 
-            var dx = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
-            var dy = Math.floor(Math.random() * (maxY - minY + 1)) + minY;
+    goPlanBtn.addEventListener("click", function(){
+        window.location.href = "schedule.html";
+    });
 
-            noBtn.style.transform = "translate(" + dx + "px, " + dy + "px)";
-        });
-
-        yesBtn.addEventListener("click", function () {
-            buttonRow.style.display = "none";
-            introLine.style.display = "none";
-            introNote.style.display = "none";
-            mainQuestion.style.display = "none";
-            topName.style.display = "none";
-
-            yesMessage.style.display = "block";
-            goPlanBtn.style.display = "inline-block";
-        });
-
-        goPlanBtn.addEventListener("click", function () {
-            window.location.href = "schedule.html";
-        });
-    })();
+})();
 </script>
 
 </body>
