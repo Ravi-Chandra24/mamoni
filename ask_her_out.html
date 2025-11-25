@@ -97,6 +97,7 @@
             font-weight: 600;
             margin-top: 10px;
             box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+            display: none;
         }
 
         #goPlanBtn:hover {
@@ -110,11 +111,10 @@
 
 <div class="box">
 
-    <div class="decor-top">アンネーシャ ラヴィチャンドラ❤️✨</div>
+    <div class="decor-top" id="topName">アンネーシャ ラヴィチャンドラ❤️✨</div>
 
-    <h2>Will you be my oxytocin receptor gene?</h2>
+    <h2 id="mainQuestion">Will you be my oxytocin receptor gene?</h2>
 
-    <!-- Text only for the first screen -->
     <p id="introLine">
         You make everything feel a little softer, a little sweeter, just by being you.
     </p>
@@ -128,12 +128,11 @@
         I know it’s cheesy but I really mean it.
     </p>
 
-    <!-- Text only after she clicks Yes -->
     <p id="yesMessage" style="display:none;">
         I know you will say yes and I know you’re very excited to meet me. Me too.
     </p>
 
-    <button id="goPlanBtn" type="button" style="display:none;">
+    <button id="goPlanBtn" type="button">
         Now let me show you the plan I made for us
     </button>
 </div>
@@ -144,10 +143,12 @@
         var yesBtn = document.getElementById("yesBtn");
         var noBtn = document.getElementById("noBtn");
         var buttonRow = document.getElementById("buttonRow");
-        //var introLine = document.getElementById("introLine");
-        //var introNote = document.getElementById("introNote");
+        var introLine = document.getElementById("introLine");
+        var introNote = document.getElementById("introNote");
         var yesMessage = document.getElementById("yesMessage");
         var goPlanBtn = document.getElementById("goPlanBtn");
+        var mainQuestion = document.getElementById("mainQuestion");
+        var topName = document.getElementById("topName");
 
         function clamp(v, a, b) {
             return Math.max(a, Math.min(b, v));
@@ -162,8 +163,8 @@
             var minY = boxRect.top - btnRect.top + 8;
             var maxY = boxRect.bottom - btnRect.bottom - 8;
 
-            var dx = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
-            var dy = Math.floor(Math.random() * (maxY - minY + 1)) + minY;
+            var dx = Math.random() * (maxX - minX) + minX;
+            var dy = Math.random() * (maxY - minY) + minY;
 
             dx = clamp(dx, minX, maxX);
             dy = clamp(dy, minY, maxY);
@@ -175,6 +176,9 @@
             buttonRow.style.display = "none";
             introLine.style.display = "none";
             introNote.style.display = "none";
+            mainQuestion.style.display = "none";
+            topName.style.display = "none";
+
             yesMessage.style.display = "block";
             goPlanBtn.style.display = "inline-block";
         });

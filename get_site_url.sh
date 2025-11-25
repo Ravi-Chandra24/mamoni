@@ -6,7 +6,10 @@ set -euo pipefail
 
 OWNER="Ravi-Chandra24"
 REPO="Ask-her-Out"
-EXPECTED_URL="https://${OWNER}.github.io/Mamoni/"
+
+# Random placeholder URL (change later to whatever you want)
+EXPECTED_URL="https://Mamoni-Ravi-Chandra.com/"
+
 echo "Repository: ${OWNER}/${REPO}"
 
 SITE_URL=""
