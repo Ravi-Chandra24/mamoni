@@ -33,7 +33,7 @@
         }
 
         .box.glow {
-            box-shadow: 0 0 40px rgba(255,0,120,0.45), 0 0 80px rgba(255,0,120,0.25);
+            box-shadow: 0 0 35px rgba(255,0,120,0.40);
             transform: scale(1.02);
         }
 
@@ -104,11 +104,10 @@
             background:#1d4ed8;
         }
 
-        /* yes message fade-in */
         #yesMessage {
             display:none;
             opacity: 0;
-            transition: opacity 0.8s ease;
+            transition: opacity 0.6s ease;
             margin-top: 10px;
         }
 
@@ -116,11 +115,11 @@
             opacity: 1;
         }
 
-        /* floating hearts */
+        /* Short-burst floating hearts */
         .heart {
             position: fixed;
             font-size: 22px;
-            animation: floatUp 1.8s ease-out forwards;
+            animation: floatUp 0.9s ease-out forwards;
             pointer-events: none;
         }
 
@@ -130,7 +129,7 @@
                 opacity: 1;
             }
             100% {
-                transform: translateY(-120px) scale(1.8);
+                transform: translateY(-70px) scale(1.4);
                 opacity: 0;
             }
         }
@@ -179,7 +178,7 @@
     var mainBox      = document.getElementById("mainBox");
     var escaped      = false;
 
-    // No button teleport outside box, no overlap
+    /* TELEPORT NO BUTTON (unchanged) */
     noBtn.addEventListener("mouseenter", function(){
         if (!escaped) {
             escaped = true;
@@ -214,7 +213,7 @@
         noBtn.style.top  = y+"px";
     });
 
-    // Small helper to spawn hearts
+    /* SHORT-BURST HEARTS */
     function spawnHearts() {
         var centerX = window.innerWidth / 2;
         var centerY = window.innerHeight / 2;
@@ -225,8 +224,8 @@
                 heart.className = "heart";
                 heart.textContent = "❤️";
 
-                var offsetX = (Math.random() * 200) - 100; // left/right spread
-                var offsetY = (Math.random() * 60) - 30;   // slight vertical jitter
+                var offsetX = (Math.random() * 200) - 100;
+                var offsetY = (Math.random() * 40) - 20;
 
                 heart.style.left = (centerX + offsetX) + "px";
                 heart.style.top  = (centerY + offsetY) + "px";
@@ -235,12 +234,12 @@
 
                 setTimeout(function(){
                     heart.remove();
-                }, 1900);
-            }, i * 120);
+                }, 950);
+            }, i * 90);
         }
     }
 
-    // Yes button: hide old stuff, show message + effects
+    /* YES BUTTON ACTION */
     yesBtn.addEventListener("click", function(){
         noBtn.style.display      = "none";
         yesBtn.style.display     = "none";
@@ -249,7 +248,6 @@
         mainQuestion.style.display = "none";
 
         yesMessage.style.display = "block";
-        // allow CSS transition to kick in
         requestAnimationFrame(function(){
             yesMessage.classList.add("show");
         });
