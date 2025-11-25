@@ -5,7 +5,6 @@
     <title>Will You Be My Oxytocin Receptor Gene?</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
@@ -20,6 +19,20 @@
             height: 100vh;
             margin: 0;
             overflow: hidden;
+            transition: background 1s ease;
+        }
+
+        /* HEARTS */
+        .heart {
+            position: fixed;
+            color: red;
+            font-size: 24px;
+            animation: floatUp 1.8s ease forwards;
+            pointer-events: none;
+        }
+        @keyframes floatUp {
+            0%   { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-120px) scale(1.8); opacity: 0; }
         }
 
         .box {
@@ -30,135 +43,99 @@
             text-align: center;
             box-shadow: 0 12px 30px rgba(15,23,42,0.18);
             position: relative;
+            transition: box-shadow 0.6s ease;
         }
 
-        .decor-top {
-            font-size: 28px;
-            margin-bottom: 10px;
-            color: #ff4d6a;
+        .glow {
+            box-shadow: 0 0 40px rgba(255,0,100,0.45), 0 0 80px rgba(255,0,100,0.25);
         }
 
         h2 {
             font-family: "Playfair Display", serif;
-            margin: 0 0 8px 0;
-            font-size: 1.55rem;
-            color: #0f172a;
-        }
-
-        p {
-            margin: 0 0 16px 0;
-            font-size: 0.95rem;
-            color: #4b5563;
-        }
-
-        .small-note {
-            font-size: 0.8rem;
-            color: #6b7280;
-            margin-top: 8px;
         }
 
         #buttonRow {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            margin: 18px 0;
+            margin-top: 14px;
         }
 
-        button {
+        #yesBtn, #noBtn {
             padding: 10px 20px;
             border-radius: 25px;
-            border: none;
-            cursor: pointer;
             font-weight: 600;
-            font-size: 0.95rem;
+            cursor: pointer;
         }
 
         #yesBtn {
             background: #2563eb;
-            color: #fff;
-            box-shadow: 0 8px 20px rgba(37,99,235,.55);
-        }
-
-        #yesBtn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 26px rgba(37,99,235,.65);
-            background:#1d4ed8;
+            color: white;
         }
 
         #noBtn {
-            background:#e5e7eb;
-            color:#374151;
+            background: #e5e7eb;
+            color: #374151;
         }
 
         #goPlanBtn {
-            background:#2563eb;
-            color:#fff;
-            padding:10px 20px;
-            border-radius:25px;
-            cursor:pointer;
-            font-weight:600;
-            margin-top:10px;
-            box-shadow:0 8px 20px rgba(37,99,235,0.4);
             display:none;
+            background:#2563eb;
+            color:white;
+            padding:10px 20px;
+            border-radius: 25px;
+            margin-top:15px;
         }
 
-        #goPlanBtn:hover {
-            transform:translateY(-1px);
-            background:#1d4ed8;
+        /* FADE-IN message */
+        #yesMessage {
+            display:none;
+            opacity: 0;
+            transition: opacity 1.2s ease;
+        }
+
+        #yesMessage.show {
+            opacity: 1;
         }
     </style>
 </head>
 
 <body>
 
-<div class="box">
-
-    <div class="decor-top" id="topName">アンネーシャ ラヴィチャンドラ❤️✨</div>
+<div class="box" id="mainBox">
 
     <h2 id="mainQuestion">Will you be my oxytocin receptor gene?</h2>
 
-    <p id="introLine">
-        You make everything feel a little softer, a little sweeter, just by being you.
-    </p>
+    <p id="introLine">You make everything feel a little softer, a little sweeter, just by being you.</p>
 
     <div id="buttonRow">
-        <button id="yesBtn" type="button">❤️ Yes</button>
-        <button id="noBtn" type="button">No</button>
+        <button id="yesBtn">❤️ Yes</button>
+        <button id="noBtn">No</button>
     </div>
 
-    <p id="introNote" class="small-note">
-        I know it’s cheesy but I really mean it.
-    </p>
+    <p id="introNote">I know it’s cheesy but I really mean it.</p>
 
-    <p id="yesMessage" style="display:none;">
+    <p id="yesMessage">
         I knew you’d hit yes.<br>
         And from this moment on, I’m never letting your hand go.<br>
         I’m yours and you’re mine ❤️.
     </p>
 
-    <button id="goPlanBtn" type="button">
-        Now let me show you the plan I made for us
-    </button>
+    <button id="goPlanBtn">Now let me show you the plan I made for us</button>
 </div>
 
 <script>
 (function(){
-    var box        = document.querySelector(".box");
+
     var yesBtn     = document.getElementById("yesBtn");
     var noBtn      = document.getElementById("noBtn");
-    var buttonRow  = document.getElementById("buttonRow");
-    var introLine  = document.getElementById("introLine");
-    var introNote  = document.getElementById("introNote");
     var yesMessage = document.getElementById("yesMessage");
     var goPlanBtn  = document.getElementById("goPlanBtn");
+    var mainBox    = document.getElementById("mainBox");
+    var introLine  = document.getElementById("introLine");
+    var introNote  = document.getElementById("introNote");
     var mainQuestion = document.getElementById("mainQuestion");
-    var topName    = document.getElementById("topName");
+    var escaped = false;
 
-    var escaped = false; // track if No has started teleporting
-
-    noBtn.addEventListener("mouseenter", function () {
-        // On first hover, convert No button to fixed so it can move outside the box
+    /* TELEPORT LOGIC */
+    noBtn.addEventListener("mouseenter", function(){
         if (!escaped) {
             escaped = true;
             var rect = noBtn.getBoundingClientRect();
@@ -169,46 +146,67 @@
 
         var vw = window.innerWidth;
         var vh = window.innerHeight;
-
         var btnW = noBtn.offsetWidth;
         var btnH = noBtn.offsetHeight;
-
-        var boxRect = box.getBoundingClientRect();
-        var margin = 20;
+        var boxRect = mainBox.getBoundingClientRect();
+        var margin = 40;
 
         var x, y, tries = 0;
         do {
-            x = Math.random() * (vw - btnW);
-            y = Math.random() * (vh - btnH);
+            x = Math.random()*(vw-btnW);
+            y = Math.random()*(vh-btnH);
             tries++;
-
             var overlap =
-                x + btnW  > boxRect.left - margin &&
-                x         < boxRect.right + margin &&
-                y + btnH  > boxRect.top - margin &&
-                y         < boxRect.bottom + margin;
-        } while (overlap && tries < 30);
+                x+btnW > boxRect.left-margin &&
+                x      < boxRect.right+margin &&
+                y+btnH > boxRect.top-margin &&
+                y      < boxRect.bottom+margin;
+        } while(overlap && tries < 25);
 
-        noBtn.style.transition = "none";
-        noBtn.style.left = x + "px";
-        noBtn.style.top  = y + "px";
+        noBtn.style.left = x+"px";
+        noBtn.style.top  = y+"px";
     });
 
-    yesBtn.addEventListener("click", function () {
-        buttonRow.style.display = "none";
+    /* YES BUTTON */
+    yesBtn.addEventListener("click", function(){
+
+        // Hide everything
+        noBtn.style.display = "none";
+        yesBtn.style.display = "none";
         introLine.style.display = "none";
         introNote.style.display = "none";
         mainQuestion.style.display = "none";
-        topName.style.display = "none";
 
+        // Show message
         yesMessage.style.display = "block";
-        goPlanBtn.style.display  = "inline-block";
-        noBtn.style.display      = "none";
+        setTimeout(() => yesMessage.classList.add("show"), 50);
+
+        // Glow box
+        mainBox.classList.add("glow");
+
+        // Hearts burst
+        for (let i = 0; i < 14; i++) {
+            setTimeout(() => {
+                let heart = document.createElement("div");
+                heart.classList.add("heart");
+                heart.innerHTML = "❤️";
+                heart.style.left = (window.innerWidth/2 + (Math.random()*200-100)) + "px";
+                heart.style.top =  (window.innerHeight/2 + (Math.random()*60-30)) + "px";
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 1800);
+            }, i*120);
+        }
+
+        // Show plan button
+        setTimeout(()=> {
+            goPlanBtn.style.display="inline-block";
+        }, 900);
     });
 
-    goPlanBtn.addEventListener("click", function () {
+    goPlanBtn.addEventListener("click", function(){
         window.location.href = "schedule.html";
     });
+
 })();
 </script>
 
